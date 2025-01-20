@@ -1,10 +1,10 @@
-function onNewFormResponse() {
-  let emailColumn = 2;
-  let checkboxColumn = 3;
-  let settingsheetName= 'Autogroup script';
-  let workingsheetName= 'Form answers';
-  let startRowCellName = 'B1';
-  let groupEmailToAdd = "test@obuda.esn.hu";
+function spreadsheetExtractor(parameters) {
+  let emailColumn = parameters.emailColumn;
+  let checkboxColumn = parameters.checkboxColumn;
+  let settingsheetName= parameters.settingsheetName;
+  let workingsheetName= parameters.workingsheetName;
+  let startRowCellName = parameters.startRowCellName;
+  let groupEmailToAdd = parameters.groupEmailToAdd;
   
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -43,11 +43,11 @@ function onNewFormResponse() {
       selection = sheetselection.setActiveSelection(emailCell);
       Logger.log("email Selection: %s",selection.getA1Notation());
       var email = selection.getValue();
-    Logger.log("Email is: %s",email);
+      Logger.log("Email is: %s",email);
     }
     if (email != "")
     {
-      var response = mainAutogroupaddfromformresponse.addUserToGoogleGroup(groupEmailToAdd, email);
+      var response = addUserToGoogleGroup(groupEmailToAdd, email);
       Logger.log(response);
 
       if (response == 200) 
@@ -56,6 +56,7 @@ function onNewFormResponse() {
       }
       checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
     }
+    
     
   } while (isDone != "" || email != "")
   startRowCell.setValue(checkboxCell.getRow());
