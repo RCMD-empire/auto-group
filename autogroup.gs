@@ -41,8 +41,13 @@ function onNewFormResponse() {
       var email = selection.getValue();
     Logger.log("Email is: %s",email);
     }
-    checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
+    if (email != "")
+    {
+      checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
+      
+    }
     
   } while (isDone != "" || email != "")
+  startRowCell.setValue(checkboxCell.getRow());
   
 }
