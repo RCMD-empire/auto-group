@@ -1,6 +1,10 @@
 function onNewFormResponse() {
   let emailColumn = 2;
   let checkboxColumn = 3;
+  let settingsheetName= 'Autogroup script';
+  let workingsheetName= 'Form answers';
+  let startRowCellName = 'B1';
+  let groupEmailToAdd = "test@obuda.esn.hu";
   
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -9,15 +13,15 @@ function onNewFormResponse() {
   for (const sheet of sheets) 
   { console.log('name: %s, ID: %s',sheet.getName(),sheet.getSheetId()) }
   
-  let settingsSheet = spreadsheet.getSheetByName('Autogroup script');
-  let workingsheet= spreadsheet.getSheetByName('Form answers');
+  let settingsSheet = spreadsheet.getSheetByName(settingsheetName);
+  let workingsheet= spreadsheet.getSheetByName(workingsheetName);
   if (!workingsheet) {
-    throw new Error('Sheet "Form answers" not found!');
+    throw new Error('Sheet '+workingsheetName+' not found!');
   }
   if (!settingsSheet) {
-    throw new Error('Sheet "Autogroup script" not found!');
+    throw new Error('Sheet '+settingsheetName+' not found!');
   }
-  let startRowCell = settingsSheet.getRange('B1');
+  let startRowCell = settingsSheet.getRange(startRowCellName);
   let startRow = startRowCell.getValue();
   Logger.log('settingsSheet startRow: %s',startRow);
 
@@ -43,11 +47,16 @@ function onNewFormResponse() {
     }
     if (email != "")
     {
+      var response = mainAutogroupaddfromformresponse.addUserToGoogleGroup(groupEmailToAdd, email);
+      Logger.log(response);
+
+      if (response == 200) 
+      {
+        checkboxCell.setValue(true);
+      }
       checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
-      
     }
     
   } while (isDone != "" || email != "")
   startRowCell.setValue(checkboxCell.getRow());
-  
 }
