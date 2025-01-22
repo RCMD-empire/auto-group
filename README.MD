@@ -17,6 +17,13 @@ Use-cases (script modify security matter)
 - if needed, get a Form-Clearer to maintain the data and not risking the script modification.
 - Test it before using in 'production'
 
+Recommendation
+- If you use this multiple times, then
+- Put the base code to an independent Script Project,
+- link it to each Spreadsheet's srcipts editor as a library,
+- in there, just use the orifinal script template, configure it,
+- and call the Base code's function.
+
 Project OAuth Scopes
 - See, edit, create, and delete all your Google Sheets spreadsheets	https://www.googleapis.com/auth/spreadsheets
 - Connect to an external service	https://www.googleapis.com/auth/script.external_request
