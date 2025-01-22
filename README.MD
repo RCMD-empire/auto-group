@@ -27,6 +27,4 @@ Recommendation
 Project OAuth Scopes
 - See, edit, create, and delete all your Google Sheets spreadsheets	https://www.googleapis.com/auth/spreadsheets
 - Connect to an external service	https://www.googleapis.com/auth/script.external_request
-- View and manage the provisioning of users on your domain	https://www.googleapis.com/auth/admin.directory.user
-- Allow this application to run when you are not present	https://www.googleapis.com/auth/script.scriptapp
 - View and manage the provisioning of groups on your domain	https://www.googleapis.com/auth/admin.directory.group
