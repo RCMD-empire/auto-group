@@ -1,5 +1,5 @@
 /* 
-version: 2025.01.22
+version: 2025.01.23
 https://github.com/RCMD-empire/auto-group
 @rcmd
 */
@@ -39,6 +39,7 @@ function spreadsheetExtractor(parameters) {
   
   // first define for the checkbox
   var checkboxCell = sheetselection.getRange(startRow,checkboxColumn);
+  let addedCount = 0;
   do
   {
     //checkbox check
@@ -68,6 +69,7 @@ function spreadsheetExtractor(parameters) {
       if (response == 200) 
       {
         checkboxCell.setValue(true);
+		addedCount++;
       }
       // if there was an email, then we did our best, so go on to the next.
       checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
@@ -78,4 +80,6 @@ function spreadsheetExtractor(parameters) {
 
   // write back our counter to know where we left the game.
   startRowCell.setValue(checkboxCell.getRow());
+  console.log('Added '+addedCount+' email to the '+groupEmailToAdd+' group.');
+  return addedCount;
 }

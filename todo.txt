@@ -1,3 +1,2 @@
 auto group
 - optional condition
-- returns (addedCounts)

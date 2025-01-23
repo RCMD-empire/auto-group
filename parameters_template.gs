@@ -15,6 +15,6 @@ parameters.groupEmailToAdd = "test@example.com";
 
 function useAutoGroup() {
 
-spreadsheetExtractor(parameters);
+var addedCounts = spreadsheetExtractor(parameters);
 //ping("recepient@example.com", parameters);
 }
