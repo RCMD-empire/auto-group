@@ -1,3 +1,4 @@
 auto group
 - optional condition
 - ping function from code
+- returns (addedCounts)
