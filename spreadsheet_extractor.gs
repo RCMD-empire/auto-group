@@ -10,6 +10,12 @@ function spreadsheetExtractor(parameters) {
   let workingsheetName= parameters.workingsheetName;
   let startRowCellName = parameters.startRowCellName;
   let groupEmailToAdd = parameters.groupEmailToAdd;
+  let condition = parameters.condition;
+
+  // condition
+    if (condition != null)
+    {Logger.log("Condition need to be '"+condition.answer+"' on the "+condition.column+" column.")} 
+    else {Logger.log("No condition needs to check")}
   
   // get the spreadsheet where from this function called
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -33,53 +39,53 @@ function spreadsheetExtractor(parameters) {
   let startRowCell = settingsSheet.getRange(startRowCellName);
   let startRow = startRowCell.getValue();
   Logger.log('settingsSheet startRow: %s',startRow);
-
-  // setting the selection
-  let sheetselection = SpreadsheetApp.setActiveSheet(spreadsheet.getSheetById(workingsheet.getSheetId()));
   
-  // first define for the checkbox
-  var checkboxCell = sheetselection.getRange(startRow,checkboxColumn);
+  
+  let row = startRow;
   let addedCount = 0;
+  let conditionGivenAnswer, checkboxCell, isDone,emailCell,email;
   do
   {
     //checkbox check
-    selection = sheetselection.setActiveSelection(checkboxCell);
-    Logger.log("checkbox Selection: %s",selection.getA1Notation());
-    var isDone = selection.getValue();
+    checkboxCell = workingsheet.getRange(row,checkboxColumn);
+    Logger.log("checkbox Selection: %s",checkboxCell.getA1Notation());
+    isDone = checkboxCell.getValue();
     Logger.log("Checkbox is %s",isDone);
-    
-    //if undifined, nonexistent, or just false -> it's our turn to precced.
+    //if the row is already proccessed, theres nothing to do. Jump next!
     if (isDone != true)
     {
-      //email check
-      emailCell = sheetselection.getRange(selection.getRow(),emailColumn);
-      selection = sheetselection.setActiveSelection(emailCell);
-      Logger.log("email Selection: %s",selection.getA1Notation());
-      var email = selection.getValue();
-      Logger.log("Email is: %s",email);
-    }
-
-    //if the email is *something*, then we can try our magic
-    if (email != "")
-    {
-      var response = addUserToGoogleGroup(groupEmailToAdd, email);
-      Logger.log(response);
-
-      // need to leave a mark if succeded
-      if (response == 200) 
+        //get condition answer
+      if (condition != null)
       {
-        checkboxCell.setValue(true);
-		addedCount++;
+        conditionGivenAnswer = workingsheet.getRange(row,condition.column).getValue();
+        Logger.log("ConditionAnswer: "+conditionGivenAnswer);
       }
-      // if there was an email, then we did our best, so go on to the next.
-      checkboxCell = sheetselection.getRange(selection.getRow() +1, checkboxColumn);
+
+      //if the checkbox is undifined, nonexistent, or just false -> it's our turn to precced.
+      if (condition == null ||  condition.answer == conditionGivenAnswer)
+      {
+        //email check
+        emailCell = workingsheet.getRange(row,emailColumn);
+        Logger.log("email Selection: %s",emailCell.getA1Notation());
+        email = emailCell.getValue();
+        Logger.log("Email is: %s",email);
+
+        var response = addUserToGoogleGroup(groupEmailToAdd, email);
+        Logger.log("ResponseCode: "+response);
+
+        // need to leave a mark if succeded
+        if (response == 200) 
+        {
+          checkboxCell.setValue(true);
+          addedCount++;
+        }
+      }
     }
-    
-    
-  } while (isDone != "" || email != "") //if we reached the end, so theres nothing left in cells, then stop.
+    row++;
+  } while (row <= workingsheet.getLastRow()) //if we reached the end, so theres nothing left in cells, then stop.
 
   // write back our counter to know where we left the game.
-  startRowCell.setValue(checkboxCell.getRow());
+  startRowCell.setValue(row-1);
   console.log('Added '+addedCount+' email to the '+groupEmailToAdd+' group.');
   return addedCount;
 }

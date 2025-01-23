@@ -5,13 +5,20 @@ version: 2025.01.23
 https://github.com/RCMD-empire/auto-group
 @rcmd
 */
-const parameters = new Object();
-parameters.emailColumn = 2;
-parameters.checkboxColumn = 3;
-parameters.settingsheetName= 'Autogroup script';
-parameters.workingsheetName= 'Form answers';
-parameters.startRowCellName = 'B1';
-parameters.groupEmailToAdd = "test@example.com";
+const parameters = {
+emailColumn: 2,
+checkboxColumn : 3,
+settingsheetName: 'Autogroup script',
+workingsheetName: 'Form answers',
+startRowCellName : 'B1',
+groupEmailToAdd : "test@example.com",
+//optional: delete if you dont need
+condition: 
+  {
+    column: 4,
+    answer: "yes"
+  }
+}
 
 function useAutoGroup() {
 
