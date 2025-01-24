@@ -1,4 +1,8 @@
-/*
+/* 
+version: 2025.01.22
+https://github.com/RCMD-empire/auto-group
+@rcmd
+
 Code 409: member already exist
 COde 403: no Admin SDK
 Code 200: successfully added
