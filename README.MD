@@ -14,8 +14,6 @@ Use-cases (script modify security matter)
 - Get an admin user
 - have all script-abled document on the admin's own Drive
 - share only View access to the Nessesary users
-- if needed, get a Form-Clearer to maintain the data and not risking the script modification.
-- Test it before using in 'production'
 
 Recommendation
 - If you use this multiple times, then
@@ -23,8 +21,12 @@ Recommendation
 - link it to each Spreadsheet's srcipts editor as a library,
 - in there, just use the orifinal script template, configure it,
 - and call the Base code's function.
+- if needed, get a [Form-Clearer](https://github.com/RCMD-empire/clear-by-form) to maintain the data and not risking the script modification.
+- Test it before using in 'production'
+- Deploy the scripts for do not get it modified accidently.
 
 Project OAuth Scopes
 - See, edit, create, and delete all your Google Sheets spreadsheets	https://www.googleapis.com/auth/spreadsheets
 - Connect to an external service	https://www.googleapis.com/auth/script.external_request
+- Read, compose, send, and permanently delete all your email from Gmail	https://mail.google.com/
 - View and manage the provisioning of groups on your domain	https://www.googleapis.com/auth/admin.directory.group
