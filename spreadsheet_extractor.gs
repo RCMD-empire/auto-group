@@ -1,5 +1,5 @@
 /* 
-version: 2025.01.23
+version: 2025.01.24
 https://github.com/RCMD-empire/auto-group
 @rcmd
 */
@@ -11,11 +11,6 @@ function spreadsheetExtractor(parameters) {
   let startRowCellName = parameters.startRowCellName;
   let groupEmailToAdd = parameters.groupEmailToAdd;
   let condition = parameters.condition;
-
-  // condition
-    if (condition != null)
-    {Logger.log("Condition need to be '"+condition.answer+"' on the "+condition.column+" column.")} 
-    else {Logger.log("No condition needs to check")}
   
   // get the spreadsheet where from this function called
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -39,53 +34,65 @@ function spreadsheetExtractor(parameters) {
   let startRowCell = settingsSheet.getRange(startRowCellName);
   let startRow = startRowCell.getValue();
   Logger.log('settingsSheet startRow: %s',startRow);
-  
-  
-  let row = startRow;
   let addedCount = 0;
-  let conditionGivenAnswer, checkboxCell, isDone,emailCell,email;
-  do
+  
+  // if nothing new, then dont do anything.
+  if (workingsheet.getLastRow() >= startRow)
   {
-    //checkbox check
-    checkboxCell = workingsheet.getRange(row,checkboxColumn);
-    Logger.log("checkbox Selection: %s",checkboxCell.getA1Notation());
-    isDone = checkboxCell.getValue();
-    Logger.log("Checkbox is %s",isDone);
-    //if the row is already proccessed, theres nothing to do. Jump next!
-    if (isDone != true)
+    // condition
+    if (condition != null)
+    {Logger.log("Condition need to be '"+condition.answer+"' on the "+condition.column+". column.")} 
+    else {Logger.log("No condition needs to check")}
+
+    let row = startRow;
+    let conditionGivenAnswer, checkboxCell, isDone,emailCell,email;
+    do
     {
-        //get condition answer
-      if (condition != null)
+      //checkbox check
+      checkboxCell = workingsheet.getRange(row,checkboxColumn);
+      Logger.log("checkbox Selection: %s",checkboxCell.getA1Notation());
+      isDone = checkboxCell.getValue();
+      Logger.log("Checkbox is %s",isDone);
+      //if the row is already proccessed, theres nothing to do. Jump next!
+      if (isDone != true)
       {
-        conditionGivenAnswer = workingsheet.getRange(row,condition.column).getValue();
-        Logger.log("ConditionAnswer: "+conditionGivenAnswer);
-      }
-
-      //if the checkbox is undifined, nonexistent, or just false -> it's our turn to precced.
-      if (condition == null ||  condition.answer == conditionGivenAnswer)
-      {
-        //email check
-        emailCell = workingsheet.getRange(row,emailColumn);
-        Logger.log("email Selection: %s",emailCell.getA1Notation());
-        email = emailCell.getValue();
-        Logger.log("Email is: %s",email);
-
-        var response = addUserToGoogleGroup(groupEmailToAdd, email);
-        Logger.log("ResponseCode: "+response);
-
-        // need to leave a mark if succeded
-        if (response == 200) 
+          //get condition answer
+        if (condition != null)
         {
-          checkboxCell.setValue(true);
-          addedCount++;
+          conditionGivenAnswer = workingsheet.getRange(row,condition.column).getValue();
+          Logger.log("ConditionAnswer: "+conditionGivenAnswer);
+        }
+
+        //if the checkbox is undifined, nonexistent, or just false -> it's our turn to precced.
+        if (condition == null ||  condition.answer == conditionGivenAnswer)
+        {
+          //email check
+          emailCell = workingsheet.getRange(row,emailColumn);
+          Logger.log("email Selection: %s",emailCell.getA1Notation());
+          email = emailCell.getValue();
+          Logger.log("Email is: %s",email);
+
+          var response = addUserToGoogleGroup(groupEmailToAdd, email);
+          Logger.log("ResponseCode: "+response);
+
+          // need to leave a mark if succeded
+          if (response == 200) 
+          {
+            checkboxCell.setValue(true);
+            addedCount++;
+          }
         }
       }
-    }
-    row++;
-  } while (row <= workingsheet.getLastRow()) //if we reached the end, so theres nothing left in cells, then stop.
+      row++;
+    } while (row <= workingsheet.getLastRow()) //if we reached the end, so theres nothing left in cells, then stop.
 
-  // write back our counter to know where we left the game.
-  startRowCell.setValue(row-1);
-  console.log('Added '+addedCount+' email to the '+groupEmailToAdd+' group.');
+    // write back our counter to know where we left the game.
+    startRowCell.setValue(row);
+    console.log('Added '+addedCount+' email to the '+groupEmailToAdd+' group.');
+  }
+  else
+  {
+    Logger.log("No new input");
+  }
   return addedCount;
 }
