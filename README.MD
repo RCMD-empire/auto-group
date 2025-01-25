@@ -1,11 +1,13 @@
 Auto-Group script
+
+A script for Google Groups to automatise the membership to the specific group. Its good if you have some kind of membership, and need a Google Form to answer some qquestions, then automatically add them to the group.
+
+Tech. Background
 - written in Google AppScript
 - Need a G. Form for input
 - linked with G. Spreadsheet
 - the script must tied to the Spreadsheet
 - configure the Spreadsheet correctly (check the template code and the template excel file)
-
-Tech. Background
 - not working with free groups (@googlegroups.com)
 - need a Google Workspace Group.
 - need "Group Admin" group priviledges
