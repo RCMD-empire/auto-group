@@ -14,13 +14,7 @@ const verdicts = {
 
 function addUserToGoogleGroup(groupEmail, userEmail)
 {
-  try {
-  const res = GroupGate.addToGroup(groupEmail,userEmail);
-  return res;
-  } catch (e)
-  {
-    return e;
-  }
+  return invokeGroupGateService(groupEmail,userEmail)
 }
 
 function spreadsheetExtractor(parameters) 
@@ -112,7 +106,6 @@ function spreadsheetExtractor(parameters)
             //Group API func
             var response = addUserToGoogleGroup(groupEmailToAdd, email);
             Logger.log("ResponseCode: "+response.status_code);
-            Logger.log("DEBUG: "+ response)
 
             // need to leave a mark if succeded
             if (response.status_code == 200) 
@@ -228,10 +221,10 @@ function setVerdict(verdictCell, verdict_str)
 
 
 function sendEmail(email_groupfeedback_config, recepient, email_template, verdictCell) {
-  Logger.log("DEBUG TEXT  "+ JSON.stringify(email_template))
+
   if (email_groupfeedback_config != null)
   {
-    GmailApp.createDraft(recepient, email_template.subject, email_template.body,{ replyTo: email_groupfeedback_config.replyTo, htmlBody: email_template.htmlbody} )
+    GmailApp.sendEmail(recepient, email_template.subject, email_template.body,{ replyTo: email_groupfeedback_config.replyTo, htmlBody: email_template.htmlbody} )
     Logger.log('Email feedback sent to: '+recepient)
     if (!verdictCell)
     {
