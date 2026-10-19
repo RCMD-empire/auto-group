@@ -190,7 +190,7 @@ function domainExcl(domain_exclusion,email)
     let domain = email.toString().split('@')[1];
     if (domain.includes(domain_exclusion))
     { 
-      Logger.log('Domain excl triggered for: ',domain)
+      Logger.log('Domain excl triggered for: ',+domain)
       return true
     }
     else 
